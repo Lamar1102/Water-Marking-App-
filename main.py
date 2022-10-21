@@ -16,9 +16,12 @@ class Window:
         frame.grid()
         ttk.Label(frame, text="Choose an image you would like to watermark from your files:").grid(column=0, row=0)
         ttk.Button(frame, text="Browse", command=self.open_file).grid(column=1, row=0)
+        self.success_message = ttk.Label(frame,text="")
+        self.success_message.grid(column=0,row=1, columnspan=2)
         self.window.mainloop()
 
     def open_file(self):
+        #Open Image
         self.file_name = tkinter.filedialog.askopenfile(parent=self.window,mode='rb',title='Choose a file')
 
         with Image.open(self.file_name.name) as img:
@@ -33,7 +36,10 @@ class Window:
             plt.title("white text")
             plt.imshow(watermark_image)
             watermark_image.show()
-            watermark_image = watermark_image.save("testing.png")
-        print(self.file_name.name)
+            wm_image_name = self.file_name.name[:-4] + "_wm.png"
+            watermark_image.save(wm_image_name)
+            self.success_message.config(text="You're picture has officially been watermarked!\n " \
+                                           "It will be saved in the same folder as the original image!")
+        print(self.file_name.name[:-4])
 
 window=Window()
